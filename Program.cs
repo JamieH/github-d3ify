@@ -6,22 +6,45 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Web;
 using System.Net;
+using System.IO;
+
 namespace github_d3ify
 {
     class Program
     {
         static void Main(string[] args)
         {
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-            WebClient wc = new WebClient();
-            wc.Headers.Add("User-Agent:  RepoDataDownloader - JamieH");
-            string githubdata = wc.DownloadString("https://api.github.com/users/JamieH/repos");
-            
-            var d3obj = getD3File(githubdata);
-            var d3json = JsonConvert.SerializeObject(d3obj);
-            
-            Console.WriteLine(d3json);
-            Console.ReadLine();
+            if(args.Length != 2)
+            {
+                Console.WriteLine("Error: unrecognized or incomplete command line.\n");
+                Console.WriteLine("USAGE:");
+                Console.WriteLine("\tgithub-d3ify <Github Username> <output file>");
+            }
+            else
+            {
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                WebClient wc = new WebClient();
+                wc.Headers.Add("User-Agent:  RepoDataDownloader - JamieH");
+                string githubdata;
+                try
+                {
+                    githubdata = wc.DownloadString("https://api.github.com/users/" + args[0] + "/repos");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: {0}", ex.Message);
+                    throw;
+                }
+
+                var d3obj = getD3File(githubdata);
+                var d3json = JsonConvert.SerializeObject(d3obj);
+                using (StreamWriter writer = new StreamWriter(args[1], true))
+                {
+                    writer.Write(d3json);
+                }
+                Console.WriteLine("Wrote to file {0}", args[1]);
+            }
+
         }
 
         public static D3.Repository getD3File(string githubjson)
