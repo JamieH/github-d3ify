@@ -38,7 +38,7 @@ namespace github_d3ify
 
                 var d3obj = getD3File(githubdata);
                 var d3json = JsonConvert.SerializeObject(d3obj);
-                using (StreamWriter writer = new StreamWriter(args[1], true))
+                using (StreamWriter writer = new StreamWriter(args[1], false))
                 {
                     writer.Write(d3json);
                 }
@@ -91,6 +91,7 @@ namespace github_d3ify
                     d3prog.desc = ghproj.description;
                     d3prog.stars = ghproj.stargazers_count;
                     d3prog.forks = ghproj.forks_count;
+                    d3prog.language = ghproj.language;
                     children.children.Add(d3prog);
                 }
 
