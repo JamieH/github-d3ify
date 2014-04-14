@@ -12,6 +12,10 @@ namespace github_d3ify
         {
             public string name { get; set; }
             public int size { get; set; }
+            public string language { get; set; }
+            public int stars { get; set; }
+            public int forks { get; set; }
+            public string desc { get; set; }
         }
 
         public class Language

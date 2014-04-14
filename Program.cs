@@ -67,17 +67,14 @@ namespace github_d3ify
                     ghp.name = s.name;
                     ghp.size = s.size;
                     ghp.language = s.language;
+                    ghp.description = s.description;
+                    ghp.stargazers_count = s.stargazers_count;
+                    ghp.forks_count = s.forks_count;
                     languages[s.language.ToString()].Add(ghp);
-               
-                //Console.WriteLine("---");
-                //Console.WriteLine(s.name);
-                //Console.WriteLine(s.size);
-                //Console.WriteLine(s.language);
-                //Console.WriteLine("---");
             }
 
             D3.Repository repo = new D3.Repository();
-            repo.name = "flare";
+            repo.name = "GitHub-Projects";
             repo.children = new List<D3.Language>();
 
             foreach(string lang in languages.Keys)
@@ -91,8 +88,12 @@ namespace github_d3ify
                     D3.Project d3prog = new D3.Project();
                     d3prog.name = ghproj.name;
                     d3prog.size = ghproj.size;
+                    d3prog.desc = ghproj.description;
+                    d3prog.stars = ghproj.stargazers_count;
+                    d3prog.forks = ghproj.forks_count;
                     children.children.Add(d3prog);
                 }
+
                 Console.WriteLine("Language: {0} has {1} projects", lang, children.children.Count);
                 repo.children.Add(children);
             }
