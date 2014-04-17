@@ -56,21 +56,31 @@ namespace github_d3ify
 
             foreach(dynamic s in github)
             {
-                if(!languages.ContainsKey(s.language.ToString()))
+                if (s.fork != true)
                 {
-                    var list = new List<Github.Project>();
-                    languages.Add(s.language.ToString(), list);
-                }
-                
-                
+                    if(!languages.ContainsKey(s.language.ToString()))
+                    {
+                        var list = new List<Github.Project>();
+                        languages.Add(s.language.ToString(), list);
+                    }
+
+            
                     Github.Project ghp = new Github.Project();
                     ghp.name = s.name;
-                    ghp.size = s.size;
+                    if (ghp.size >= 34)
+                    {
+                        ghp.size = 34;
+                    }
+                    else
+                    {
+                        ghp.size = s.size;
+                    }
                     ghp.language = s.language;
                     ghp.description = s.description;
                     ghp.stargazers_count = s.stargazers_count;
                     ghp.forks_count = s.forks_count;
                     languages[s.language.ToString()].Add(ghp);
+                }
             }
 
             D3.Repository repo = new D3.Repository();
